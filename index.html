@@ -116,101 +116,95 @@
     <!-- Translation File -->
     <script src="translations.js"></script>
     <script>
-        // Initial language setup
         let currentLanguage = 'en';
+        let days = []; // Holds the weekly diet plan data
+        const dietPlansContainer = document.getElementById('diet-plans');
 
-        // Function to switch language
+        // Function to switch language and update UI
         function switchLanguage(lang) {
             currentLanguage = lang;
+            updateButtonText();
+            updateUIElements();
+            generateDaysArray(); // Regenerate the days array
+            renderDietPlans(true); // Render only today's plan
+        }
 
-            // Update text content based on the selected language
-            document.getElementById('title').textContent = translations[lang].title;
-            document.getElementById('today-btn').textContent = translations[lang].today;
-            document.getElementById('show-all-btn').textContent = translations[lang].showAll;
+        // Update language toggle button text
+        function updateButtonText() {
+            const toggleButton = document.getElementById('language-toggle-btn');
+            toggleButton.textContent = currentLanguage === 'en' ? 'हिंदी' : 'English';
+        }
 
-            // Update meal time labels
+        // Update UI elements with the current language
+        function updateUIElements() {
+            document.getElementById('title').textContent = translations[currentLanguage].title;
+            document.getElementById('today-btn').textContent = translations[currentLanguage].today;
+            document.getElementById('show-all-btn').textContent = translations[currentLanguage].showAll;
+
             document.querySelectorAll('.meal-time').forEach(mealTime => {
                 const time = mealTime.dataset.time;
-                mealTime.textContent = `${translations[lang].mealTimes[time]}:`;
+                mealTime.textContent = `${translations[currentLanguage].mealTimes[time]}:`;
             });
 
-            // Update dropdown options with translations
-            document.querySelectorAll('select').forEach(select => {
-                // Store selected value before changing options
-                const selectedValue = select.value;
-                select.innerHTML = `<option value="">${translations[lang].selectOption}</option>`;
-                
-                // Determine which options to use based on time of the meal
-                let options;
-                if (select.closest('.meal').querySelector('.meal-time').dataset.time === 'breakfast') {
-                    options = translations[lang].mealOptions.breakfast;
-                } else if (['lunch', 'dinner'].includes(select.closest('.meal').querySelector('.meal-time').dataset.time)) {
-                    options = translations[lang].mealOptions.lunchDinner;
-                } else {
-                    options = translations[lang].mealOptions.snacks;
-                }
+            updateSelectOptions(); // Update select options with translated content
+        }
 
-                // Add translated options
+        // Update dropdown options with translations
+        function updateSelectOptions() {
+            document.querySelectorAll('select').forEach(select => {
+                const selectedValue = select.value;
+                const time = select.closest('.meal').querySelector('.meal-time').dataset.time;
+                const options = getMealOptions(time);
+
+                select.innerHTML = `<option value="">${translations[currentLanguage].selectOption}</option>`;
                 options.forEach(option => {
                     select.innerHTML += `<option value="${option}">${option}</option>`;
                 });
-
-                // Restore selected value
-                select.value = selectedValue;
+                select.value = selectedValue; // Restore the selected value
             });
+        }
 
-            // Regenerate days array and render plans
-            generateDaysArray();
-            renderDietPlans(true); // Re-render plans with updated language
+        // Get meal options based on meal time
+        function getMealOptions(time) {
+            if (time === 'breakfast') return translations[currentLanguage].mealOptions.breakfast;
+            if (['lunch', 'dinner'].includes(time)) return translations[currentLanguage].mealOptions.lunchDinner;
+            return translations[currentLanguage].mealOptions.snacks;
         }
 
         // Toggle language button click event
         document.getElementById('language-toggle-btn').addEventListener('click', () => {
-            if (currentLanguage === 'en') {
-                switchLanguage('hi');
-                document.getElementById('language-toggle-btn').textContent = 'English';
-            } else {
-                switchLanguage('en');
-                document.getElementById('language-toggle-btn').textContent = 'हिंदी';
-            }
+            const newLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+            switchLanguage(newLanguage);
         });
 
-        // Function to create a dropdown menu
+        // Create a dropdown menu with the provided options
         function createDropdown(options) {
-            let dropdown = `
+            return `
                 <div class="form-group">
                     <select class="form-control">
-                        <option value="">${translations[currentLanguage].selectOption}</option>`;
-                        options.forEach(option => {
-                            dropdown += `<option value="${option}">${option}</option>`;
-                        });
-                        dropdown += `
+                        <option value="">${translations[currentLanguage].selectOption}</option>
+                        ${options.map(option => `<option value="${option}">${option}</option>`).join('')}
                     </select>
                 </div>`;
-            return dropdown;
         }
 
-        // Function to create meal section
+        // Create meal section with the provided time and content
         function createMeal(time, content) {
             return `
                 <div class="meal">
                     <span class="meal-time" data-time="${time}">${translations[currentLanguage].mealTimes[time]}:</span> ${content}
-                </div>
-            `;
+                </div>`;
         }
 
-        // Function to create a day's plan
+        // Create a day's plan with the provided day and meals
         function createDayPlan(day, meals) {
-            let dayPlan = `<div class="day-plan">
-                <h2>${day}</h2>`;
-            meals.forEach(meal => {
-                dayPlan += createMeal(meal.time, meal.content);
-            });
-            dayPlan += '</div>';
-            return dayPlan;
+            return `<div class="day-plan">
+                <h2>${day}</h2>
+                ${meals.map(meal => createMeal(meal.time, meal.content)).join('')}
+            </div>`;
         }
 
-        // Function to generate the days array based on the current language
+        // Generate the days array based on the current language
         function generateDaysArray() {
             const breakfastOptions = translations[currentLanguage].mealOptions.breakfast;
             const lunchDinnerOptions = translations[currentLanguage].mealOptions.lunchDinner;
@@ -280,15 +274,14 @@
             ];
         }
 
-        // Function to get today's day name
+        // Get today's day name based on the current language
         function getTodayDay() {
-            const daysOfWeek = translations[currentLanguage].days;
-            const today = new Date().getDay();
-            const dayKeys = Object.keys(daysOfWeek);
-            return daysOfWeek[dayKeys[today]];
+            const today = new Date().getDay(); // 0 is Sunday, 1 is Monday, and so on.
+            const dayKeys = Object.keys(translations[currentLanguage].days);
+            return translations[currentLanguage].days[dayKeys[today]];
         }
 
-        // Function to render diet plans
+        // Render diet plans based on the display mode
         function renderDietPlans(showTodayOnly) {
             dietPlansContainer.innerHTML = '';
             if (showTodayOnly) {
@@ -304,7 +297,7 @@
             }
         }
 
-        // Function to update button states
+        // Update button states based on the display mode
         function updateButtonStates(showTodayOnly) {
             const todayButton = document.getElementById('today-btn');
             const showAllButton = document.getElementById('show-all-btn');
@@ -334,8 +327,6 @@
         });
 
         // Initial render
-        let days = []; // Define days array
-        const dietPlansContainer = document.getElementById('diet-plans');
         generateDaysArray(); // Initialize days array
         renderDietPlans(true);  // Show today's plan initially
         updateButtonStates(true);  // Set "Today" button as active
