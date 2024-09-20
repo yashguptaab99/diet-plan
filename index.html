@@ -230,13 +230,21 @@
             ]}
         ];
 
+        // Function to get today's day name
+        function getTodayDay() {
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const today = new Date().getDay();
+            return daysOfWeek[today];
+        }
 
-        // Rendering the diet plan
+        // Rendering the diet plan for today
         const dietPlansContainer = document.getElementById('diet-plans');
-        days.forEach(day => {
-            dietPlansContainer.innerHTML += createDayPlan(day.day, day.meals);
-        });
-
+        const todayDay = getTodayDay();
+        const todayPlan = days.find(day => day.day === todayDay);
+        
+        if (todayPlan) {
+            dietPlansContainer.innerHTML = createDayPlan(todayPlan.day, todayPlan.meals);
+        }
     </script>
 </body>
 </html>
