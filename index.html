@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Diet Plan</title>
+    <!-- Favicon Links -->
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/public/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/public/android-chrome-512x512.png">
+    <link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -49,6 +59,27 @@
             background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 140,0 70,70" fill="#0073e6"/></svg>') no-repeat right 15px center/10px 10px; /* Custom arrow */
             background-color: #fff; 
         }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; 
+        }
+        .btn-group .btn {
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer;
+            margin: 0 10px; 
+        }
+        .btn-active {
+            background-color: #0073e6;
+            color: #fff;
+            border: none;
+        }
+        .btn-inactive {
+            background-color: #f1f1f1;
+            color: #333;
+            border: 1px solid #ddd;
+        }
         @media (max-width: 576px) {
             .day-plan {
                 padding: 15px;
@@ -63,6 +94,10 @@
 <body>
     <div class="container">
         <h1>Weekly Diet Plan</h1>
+        <div class="btn-group">
+            <button id="today-btn" class="btn btn-active">Today</button>
+            <button id="show-all-btn" class="btn btn-inactive">Show All</button>
+        </div>
         <div id="diet-plans"></div>
     </div>
 
@@ -237,14 +272,55 @@
             return daysOfWeek[today];
         }
 
-        // Rendering the diet plan for today
-        const dietPlansContainer = document.getElementById('diet-plans');
-        const todayDay = getTodayDay();
-        const todayPlan = days.find(day => day.day === todayDay);
-        
-        if (todayPlan) {
-            dietPlansContainer.innerHTML = createDayPlan(todayPlan.day, todayPlan.meals);
+        // Function to render diet plans
+        function renderDietPlans(showTodayOnly) {
+            dietPlansContainer.innerHTML = '';
+            if (showTodayOnly) {
+                const todayDay = getTodayDay();
+                const todayPlan = days.find(day => day.day === todayDay);
+                if (todayPlan) {
+                    dietPlansContainer.innerHTML = createDayPlan(todayPlan.day, todayPlan.meals);
+                }
+            } else {
+                days.forEach(day => {
+                    dietPlansContainer.innerHTML += createDayPlan(day.day, day.meals);
+                });
+            }
         }
+
+        // Function to update button states
+        function updateButtonStates(showTodayOnly) {
+            const todayButton = document.getElementById('today-btn');
+            const showAllButton = document.getElementById('show-all-btn');
+
+            if (showTodayOnly) {
+                todayButton.classList.remove('btn-inactive');
+                todayButton.classList.add('btn-active');
+                showAllButton.classList.remove('btn-active');
+                showAllButton.classList.add('btn-inactive');
+            } else {
+                todayButton.classList.remove('btn-active');
+                todayButton.classList.add('btn-inactive');
+                showAllButton.classList.remove('btn-inactive');
+                showAllButton.classList.add('btn-active');
+            }
+        }
+
+        // Event listeners for buttons
+        document.getElementById('today-btn').addEventListener('click', () => {
+            renderDietPlans(true);
+            updateButtonStates(true);
+        });
+
+        document.getElementById('show-all-btn').addEventListener('click', () => {
+            renderDietPlans(false);
+            updateButtonStates(false);
+        });
+
+        // Initial render
+        const dietPlansContainer = document.getElementById('diet-plans');
+        renderDietPlans(true);  // Show today's plan initially
+        updateButtonStates(true);  // Set "Today" button as active
     </script>
 </body>
 </html>
