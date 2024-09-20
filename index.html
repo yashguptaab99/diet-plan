@@ -80,6 +80,10 @@
             color: #333;
             border: 1px solid #ddd;
         }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 10px;
+        }
         @media (max-width: 576px) {
             .day-plan {
                 padding: 15px;
@@ -93,7 +97,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Weekly Diet Plan</h1>
+        <!-- Language Toggle Button -->
+        <div class="language-toggle">
+            <button id="language-toggle-btn" class="btn btn-inactive">हिंदी</button>
+        </div>
+        <h1 id="title">Weekly Diet Plan</h1>
         <div class="btn-group">
             <button id="today-btn" class="btn btn-active">Today</button>
             <button id="show-all-btn" class="btn btn-inactive">Show All</button>
@@ -105,73 +113,74 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+    <!-- Translation File -->
+    <script src="translations.js"></script>
     <script>
-        // Meal options
-        const breakfastOptions = [
-            "300-400 ml Milk with Bournvita, 2 Almonds, 1 Whole Wheat Toast, 1 Boiled Egg",
-            "Paneer Scramble with Spinach (20g protein) 100g paneer scrambled with spinach, onions, and tomatoes.",
-            "Oats with Berries and Almonds (15g protein) Oats cooked with 300ml milk, topped with berries and 5-6 almonds.",
-            "Egg White Veggie Omelette (25g protein) 4 egg whites with bell peppers, onions, and spinach.",
-            "Soya Chunks and Quinoa Bowl (20g protein) 100g cooked soya chunks mixed with 1/2 cup quinoa, sautéed veggies.",
-            "Greek Yogurt Parfait (20g protein) 200g Greek yogurt with mixed berries, chia seeds, and almonds.",
-            "Chickpea Pancakes (15g protein) 100g chickpea flour pancakes with herbs and spices.",
-            "Boiled Eggs with Toast (20g protein) 2 boiled eggs with whole wheat toast.",
-            "Masala Oats with Paneer (18g protein) Spicy oats cooked with 50g crumbled paneer, carrots, and peas.",
-            "Mung Dal Chilla (Pancake) (15g protein) 100g mung dal batter with chopped veggies, pan-fried."
-        ];
+        // Initial language setup
+        let currentLanguage = 'en';
 
-        const lunchDinnerOptions = [
-            "100g Paneer Salad, 1 Multigrain Roti, Mixed Veg Salad",
-            "Rajma (Kidney Bean) Curry with Rice (18g protein) 1 cup rajma curry with 1/2 cup steamed rice.",
-            "Paneer Curry with Chapati (20g protein) 100g paneer cooked in curry served with 1 chapati.",
-            "Chana Masala with Rice (20g protein) 1 cup chana masala (chickpea curry) with 1/2 cup rice.",
-            "Soya Chunks Pulao (20g protein) 1/2 cup rice cooked with 50g soya chunks and vegetables.",
-            "Vegetable Khichdi with Curd (18g protein) 1 cup vegetable khichdi made with dal and rice, served with curd.",
-            "Egg Curry with Chapati (20g protein) 2 boiled eggs cooked in curry sauce with 1 chapati.",
-            "Tofu and Mixed Vegetable Stir-fry with Rice (20g protein) 100g tofu with veggies, served with 1/2 cup steamed rice.",
-            "Paneer Makhani with Chapati (20g protein) 100g paneer in a rich tomato-based gravy with 1 chapati.",
-            "Lentil (Dal) Soup with Rice (18g protein) 1 cup masoor dal soup with 1/2 cup rice.",
-            "Vegetable Pulao with Paneer (18g protein) 1/2 cup rice with paneer cubes and mixed vegetables.",
-            "100g Chickpea Chaat with Cucumber, Tomato, and Spices (Chickpea Salad)",
-            "100g Paneer Tikka, 1 Cup Quinoa, Mixed Veggies",
-            "100g Sprouts Salad with Mixed Vegetables, Lemon, and Spices",
-            "100g Soya Chunks Curry, 1 Multigrain Roti, Steamed Vegetables",
-            "100g Masoor Dal, 1 Cup Quinoa, Mixed Veggies",
-            "100g Soya Chunks with Spinach, 1 Multigrain Roti, Mixed Salad",
-            "Kadhi with Rice (12g protein) Yogurt-based curry with besan served with 1 cup rice.",
-            "Paneer Bhurji with 1 Chapati (20g protein) Scrambled paneer with spices and a chapati.",
-            "Vegetable Khichdi with Curd (15g protein) Rice and lentil khichdi with mixed vegetables, served with curd.",
-            "Soya Chunks Biryani with Raita (20g protein) Soya chunks cooked with rice and served with raita.",
-            "Mixed Vegetable Sabzi with 2 Chapatis (12g protein) Mixed vegetables cooked with Indian spices and served with 2 chapatis.",
-            "Masoor Dal with Rice (15g protein) Red lentil curry with 1 cup rice.",
-            "Methi Malai Paneer with 1 Chapati (20g protein) Fenugreek leaves and paneer in a creamy gravy with a chapati.",
-            "Aloo Gobi with Rice (10g protein) Potatoes and cauliflower cooked with spices, served with rice.",
-            "Daal Palak with Roti (15g protein) Spinach and lentil curry with 1 roti.",
-            "Paneer Kathi Roll (20g protein) Whole wheat roti stuffed with paneer and vegetables.",
-            "100g Soya Chunks Curry, 1/2 Cup Brown Rice, Steamed Vegetables"
-        ];
+        // Function to switch language
+        function switchLanguage(lang) {
+            currentLanguage = lang;
 
-        const snackOptions = [
-            "1 Small Bowl of Greek Yogurt with 1 tsp Honey",
-            "Roasted Chickpeas with Spices",
-            "1 Small Bowl of Roasted Makhanas (Fox Nuts)",
-            "1 Small Bowl of Sprouted Moong with Spices",
-            "1 Small Bowl of Cottage Cheese with Cucumber",
-            "Roasted Chana with Spices (15g protein) Roasted chickpeas with a sprinkle of chaat masala.",
-            "Cucumber and Carrot Sticks with Hummus Sliced cucumber and carrot sticks with 2 tbsp hummus.",
-            "Fruit Salad with Chaat Masala A bowl of mixed fruits with chaat masala.",
-            "Murmura (Puffed Rice) with Peanuts Puffed rice mixed with roasted peanuts and spices.",
-            "Masala Oats Pancake (10g protein) Savory pancake made with oats and vegetables.",
-            "Sprouted Moong Bhel (12g protein) Sprouted moong"
-        ];
+            // Update text content based on the selected language
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('today-btn').textContent = translations[lang].today;
+            document.getElementById('show-all-btn').textContent = translations[lang].showAll;
+
+            // Update meal time labels
+            document.querySelectorAll('.meal-time').forEach(mealTime => {
+                const time = mealTime.dataset.time;
+                mealTime.textContent = `${translations[lang].mealTimes[time]}:`;
+            });
+
+            // Update dropdown options with translations
+            document.querySelectorAll('select').forEach(select => {
+                // Store selected value before changing options
+                const selectedValue = select.value;
+                select.innerHTML = `<option value="">${translations[lang].selectOption}</option>`;
+                
+                // Determine which options to use based on time of the meal
+                let options;
+                if (select.closest('.meal').querySelector('.meal-time').dataset.time === 'breakfast') {
+                    options = translations[lang].mealOptions.breakfast;
+                } else if (['lunch', 'dinner'].includes(select.closest('.meal').querySelector('.meal-time').dataset.time)) {
+                    options = translations[lang].mealOptions.lunchDinner;
+                } else {
+                    options = translations[lang].mealOptions.snacks;
+                }
+
+                // Add translated options
+                options.forEach(option => {
+                    select.innerHTML += `<option value="${option}">${option}</option>`;
+                });
+
+                // Restore selected value
+                select.value = selectedValue;
+            });
+
+            // Regenerate days array and render plans
+            generateDaysArray();
+            renderDietPlans(true); // Re-render plans with updated language
+        }
+
+        // Toggle language button click event
+        document.getElementById('language-toggle-btn').addEventListener('click', () => {
+            if (currentLanguage === 'en') {
+                switchLanguage('hi');
+                document.getElementById('language-toggle-btn').textContent = 'English';
+            } else {
+                switchLanguage('en');
+                document.getElementById('language-toggle-btn').textContent = 'हिंदी';
+            }
+        });
 
         // Function to create a dropdown menu
         function createDropdown(options) {
             let dropdown = `
                 <div class="form-group">
                     <select class="form-control">
-                        <option value="">Select an Option</option>`;
+                        <option value="">${translations[currentLanguage].selectOption}</option>`;
                         options.forEach(option => {
                             dropdown += `<option value="${option}">${option}</option>`;
                         });
@@ -185,7 +194,7 @@
         function createMeal(time, content) {
             return `
                 <div class="meal">
-                    <span class="meal-time">${time}:</span> ${content}
+                    <span class="meal-time" data-time="${time}">${translations[currentLanguage].mealTimes[time]}:</span> ${content}
                 </div>
             `;
         }
@@ -201,75 +210,82 @@
             return dayPlan;
         }
 
-        // Days data
-        const days = [
-            { day: "Monday", meals: [
-                { time: "Breakfast (10:30 AM)", content: createDropdown(breakfastOptions) },
-                { time: "Mid-Morning Snack (1:00 PM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (2:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (4:00 PM)", content: "300-400 ml Cappuccino Coffee, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "24g Whey Protein Shake" },
-                { time: "Dinner (8:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (10:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Tuesday", meals: [
-                { time: "Mid-Morning Snack (11:00 AM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (1:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (3:30 PM)", content: "1 Serving of Pre-Workout Drink, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "1 Scoop of Whey Protein with Water" },
-                { time: "Dinner (7:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (9:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Wednesday", meals: [
-                { time: "Breakfast (10:30 AM)", content: createDropdown(breakfastOptions) },
-                { time: "Mid-Morning Snack (1:00 PM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (2:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (4:00 PM)", content: "300-400 ml Cappuccino Coffee, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "24g Whey Protein Shake" },
-                { time: "Dinner (8:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (10:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Thursday", meals: [
-                { time: "Mid-Morning Snack (11:00 AM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (1:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (3:30 PM)", content: "1 Serving of Pre-Workout Drink, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "1 Scoop of Whey Protein with Water" },
-                { time: "Dinner (7:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (9:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Friday", meals: [
-                { time: "Breakfast (10:30 AM)", content: createDropdown(breakfastOptions) },
-                { time: "Mid-Morning Snack (1:00 PM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (2:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (4:00 PM)", content: "300-400 ml Cappuccino Coffee, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "24g Whey Protein Shake" },
-                { time: "Dinner (8:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (10:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Saturday", meals: [
-                { time: "Mid-Morning Snack (11:00 AM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (1:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (3:30 PM)", content: "1 Serving of Pre-Workout Drink, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "1 Scoop of Whey Protein with Water" },
-                { time: "Dinner (7:30 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (9:30 PM)", content: createDropdown(snackOptions) }
-            ]},
-            { day: "Sunday", meals: [
-                { time: "Breakfast (10:30 AM)", content: createDropdown(breakfastOptions) },
-                { time: "Mid-Morning Snack (1:00 PM)", content: "1 Serving of supply® 360 + 1 Fruit" },
-                { time: "Lunch (2:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Pre-Workout Snack (4:00 PM)", content: "300-400 ml Cappuccino Coffee, 1 Fruit" },
-                { time: "Post-Workout (5:30 PM)", content: "24g Whey Protein Shake" },
-                { time: "Dinner (8:00 PM)", content: createDropdown(lunchDinnerOptions) },
-                { time: "Light Snack (10:30 PM)", content: createDropdown(snackOptions) }
-            ]}
-        ];
+        // Function to generate the days array based on the current language
+        function generateDaysArray() {
+            const breakfastOptions = translations[currentLanguage].mealOptions.breakfast;
+            const lunchDinnerOptions = translations[currentLanguage].mealOptions.lunchDinner;
+            const snackOptions = translations[currentLanguage].mealOptions.snacks;
+
+            days = [
+                { day: translations[currentLanguage].days.monday, meals: [
+                    { time: "breakfast", content: createDropdown(breakfastOptions) },
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.tuesday, meals: [
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.wednesday, meals: [
+                    { time: "breakfast", content: createDropdown(breakfastOptions) },
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.thursday, meals: [
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.friday, meals: [
+                    { time: "breakfast", content: createDropdown(breakfastOptions) },
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.saturday, meals: [
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]},
+                { day: translations[currentLanguage].days.sunday, meals: [
+                    { time: "breakfast", content: createDropdown(breakfastOptions) },
+                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
+                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
+                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
+                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
+                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
+                    { time: "lightSnack", content: createDropdown(snackOptions) }
+                ]}
+            ];
+        }
 
         // Function to get today's day name
         function getTodayDay() {
-            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const daysOfWeek = translations[currentLanguage].days;
             const today = new Date().getDay();
-            return daysOfWeek[today];
+            const dayKeys = Object.keys(daysOfWeek);
+            return daysOfWeek[dayKeys[today]];
         }
 
         // Function to render diet plans
@@ -306,7 +322,7 @@
             }
         }
 
-        // Event listeners for buttons
+        // Event listeners for "Today" and "Show All" buttons
         document.getElementById('today-btn').addEventListener('click', () => {
             renderDietPlans(true);
             updateButtonStates(true);
@@ -318,7 +334,9 @@
         });
 
         // Initial render
+        let days = []; // Define days array
         const dietPlansContainer = document.getElementById('diet-plans');
+        generateDaysArray(); // Initialize days array
         renderDietPlans(true);  // Show today's plan initially
         updateButtonStates(true);  // Set "Today" button as active
     </script>
