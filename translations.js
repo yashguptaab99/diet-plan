@@ -105,7 +105,7 @@ const translations = {
         lightSnack: "हल्का नाश्ता",
         selectOption: "एक विकल्प चुनें",
         supply360: "1 सर्विंग सप्लाई® 360 + 1 फल",
-        cappuccino: "300-400 मिली कप्पुकिनो कॉफी, 1 फल",
+        cappuccino: "300-400 मिली कैप्पुचीनो कॉफी, 1 फल",
         wheyProteinShake: "24 ग्राम व्हे प्रोटीन शेक",
         preWorkoutDrink: "1 सर्विंग प्री-वर्कआउट ड्रिंक, 1 फल",
         wheyProteinWithWater: "1 स्कूप व्हे प्रोटीन पानी के साथ",
