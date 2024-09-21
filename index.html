@@ -192,7 +192,7 @@
         function createMeal(time, content) {
             return `
                 <div class="meal">
-                    <span class="meal-time" data-time="${time}">${translations[currentLanguage].mealTimes[time]}:</span> ${content}
+                    <span class="meal-time" data-time="${time}">${time}:</span> ${content}
                 </div>`;
         }
 
@@ -210,68 +210,92 @@
             const lunchDinnerOptions = translations[currentLanguage].mealOptions.lunchDinner;
             const snackOptions = translations[currentLanguage].mealOptions.snacks;
 
-            days = [
-                { day: translations[currentLanguage].days.monday, meals: [
-                    { time: "breakfast", content: createDropdown(breakfastOptions) },
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.tuesday, meals: [
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.wednesday, meals: [
-                    { time: "breakfast", content: createDropdown(breakfastOptions) },
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.thursday, meals: [
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.friday, meals: [
-                    { time: "breakfast", content: createDropdown(breakfastOptions) },
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.saturday, meals: [
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].preWorkoutDrink },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinWithWater },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]},
-                { day: translations[currentLanguage].days.sunday, meals: [
-                    { time: "breakfast", content: createDropdown(breakfastOptions) },
-                    { time: "midMorningSnack", content: translations[currentLanguage].supply360 },
-                    { time: "lunch", content: createDropdown(lunchDinnerOptions) },
-                    { time: "preWorkoutSnack", content: translations[currentLanguage].cappuccino },
-                    { time: "postWorkout", content: translations[currentLanguage].wheyProteinShake },
-                    { time: "dinner", content: createDropdown(lunchDinnerOptions) },
-                    { time: "lightSnack", content: createDropdown(snackOptions) }
-                ]}
-            ];
+            // Helper function to get meal time for the current language and day
+            function getMealTime(day, time) {
+                return translations[currentLanguage].mealTimes[day][time];
+            }
+
+            // Helper function to create meal object
+            function createMeal(day, time, content) {
+                return { time: getMealTime(day, time), content };
+            }
+
+            // Common meal options
+            const supply360 = translations[currentLanguage].supply360;
+            const cappuccino = translations[currentLanguage].cappuccino;
+            const wheyProteinShake = translations[currentLanguage].wheyProteinShake;
+            const preWorkoutDrink = translations[currentLanguage].preWorkoutDrink;
+            const wheyProteinWithWater = translations[currentLanguage].wheyProteinWithWater;
+
+            // Define day-wise meal configurations
+            const dayMeals = {
+                monday: [
+                    createMeal('monday', 'breakfast', createDropdown(breakfastOptions)),
+                    createMeal('monday', 'midMorningSnack', supply360),
+                    createMeal('monday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('monday', 'preWorkoutSnack', cappuccino),
+                    createMeal('monday', 'postWorkout', wheyProteinShake),
+                    createMeal('monday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('monday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                tuesday: [
+                    createMeal('tuesday', 'midMorningSnack', supply360),
+                    createMeal('tuesday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('tuesday', 'preWorkoutSnack', preWorkoutDrink),
+                    createMeal('tuesday', 'postWorkout', wheyProteinWithWater),
+                    createMeal('tuesday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('tuesday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                wednesday: [
+                    createMeal('wednesday', 'breakfast', createDropdown(breakfastOptions)),
+                    createMeal('wednesday', 'midMorningSnack', supply360),
+                    createMeal('wednesday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('wednesday', 'preWorkoutSnack', cappuccino),
+                    createMeal('wednesday', 'postWorkout', wheyProteinShake),
+                    createMeal('wednesday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('wednesday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                thursday: [
+                    createMeal('thursday', 'midMorningSnack', "1 Serving of supply® 36G + 1 Fruit"),
+                    createMeal('thursday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('thursday', 'preWorkoutSnack', preWorkoutDrink),
+                    createMeal('thursday', 'postWorkout', wheyProteinWithWater),
+                    createMeal('thursday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('thursday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                friday: [
+                    createMeal('friday', 'breakfast', createDropdown(breakfastOptions)),
+                    createMeal('friday', 'midMorningSnack', supply360),
+                    createMeal('friday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('friday', 'preWorkoutSnack', cappuccino),
+                    createMeal('friday', 'postWorkout', wheyProteinShake),
+                    createMeal('friday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('friday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                saturday: [
+                    createMeal('saturday', 'midMorningSnack', "1 Serving of supply® 36G + 1 Fruit"),
+                    createMeal('saturday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('saturday', 'preWorkoutSnack', preWorkoutDrink),
+                    createMeal('saturday', 'postWorkout', wheyProteinWithWater),
+                    createMeal('saturday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('saturday', 'lightSnack', createDropdown(snackOptions))
+                ],
+                sunday: [
+                    createMeal('sunday', 'breakfast', createDropdown(breakfastOptions)),
+                    createMeal('sunday', 'midMorningSnack', supply360),
+                    createMeal('sunday', 'lunch', createDropdown(lunchDinnerOptions)),
+                    createMeal('sunday', 'preWorkoutSnack', cappuccino),
+                    createMeal('sunday', 'postWorkout', wheyProteinShake),
+                    createMeal('sunday', 'dinner', createDropdown(lunchDinnerOptions)),
+                    createMeal('sunday', 'lightSnack', createDropdown(snackOptions))
+                ]
+            };
+
+            // Create days array using day-wise meal configurations
+            days = Object.keys(dayMeals).map(day => ({
+                day: translations[currentLanguage].days[day],
+                meals: dayMeals[day]
+            }));
         }
 
         // Get today's day name based on the current language

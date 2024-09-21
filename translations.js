@@ -17,13 +17,66 @@ const translations = {
         preWorkoutDrink: "1 Serving of Pre-Workout Drink, 1 Fruit",
         wheyProteinWithWater: "1 Scoop of Whey Protein with Water",
         mealTimes: {
-            breakfast: "Breakfast",
-            midMorningSnack: "Mid-Morning Snack",
-            lunch: "Lunch",
-            preWorkoutSnack: "Pre-Workout Snack",
-            postWorkout: "Post-Workout",
-            dinner: "Dinner",
-            lightSnack: "Light Snack"
+            monday: {
+                breakfast: "Breakfast (10:30 AM)",
+                midMorningSnack: "Mid-Morning Snack (1:00 PM)",
+                lunch: "Lunch (2:00 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (4:00 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (8:00 PM)",
+                lightSnack: "Light Snack (10:30 PM)"
+            },
+            tuesday: {
+                midMorningSnack: "Mid-Morning Snack (11:00 AM)",
+                lunch: "Lunch (1:30 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (3:30 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (7:30 PM)",
+                lightSnack: "Light Snack (9:30 PM)"
+            },
+            wednesday: {
+                breakfast: "Breakfast (10:30 AM)",
+                midMorningSnack: "Mid-Morning Snack (1:00 PM)",
+                lunch: "Lunch (2:00 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (4:00 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (8:00 PM)",
+                lightSnack: "Light Snack (10:30 PM)"
+            },
+            thursday: {
+                midMorningSnack: "Mid-Morning Snack (11:00 AM)",
+                lunch: "Lunch (1:30 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (3:30 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (7:30 PM)",
+                lightSnack: "Light Snack (9:30 PM)"
+            },
+            friday: {
+                breakfast: "Breakfast (10:30 AM)",
+                midMorningSnack: "Mid-Morning Snack (1:00 PM)",
+                lunch: "Lunch (2:00 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (4:00 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (8:00 PM)",
+                lightSnack: "Light Snack (10:30 PM)"
+            },
+            saturday: {
+                midMorningSnack: "Mid-Morning Snack (11:00 AM)",
+                lunch: "Lunch (1:30 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (3:30 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (7:30 PM)",
+                lightSnack: "Light Snack (9:30 PM)"
+            },
+            sunday: {
+                breakfast: "Breakfast (10:30 AM)",
+                midMorningSnack: "Mid-Morning Snack (1:00 PM)",
+                lunch: "Lunch (2:00 PM)",
+                preWorkoutSnack: "Pre-Workout Snack (4:00 PM)",
+                postWorkout: "Post-Workout (5:30 PM)",
+                dinner: "Dinner (8:00 PM)",
+                lightSnack: "Light Snack (10:30 PM)"
+            }
         },
         days: {
             sunday: "Sunday",
@@ -110,13 +163,66 @@ const translations = {
         preWorkoutDrink: "1 सर्विंग प्री-वर्कआउट ड्रिंक, 1 फल",
         wheyProteinWithWater: "1 स्कूप व्हे प्रोटीन पानी के साथ",
         mealTimes: {
-            breakfast: "नाश्ता",
-            midMorningSnack: "मध्य सुबह का नाश्ता",
-            lunch: "दोपहर का भोजन",
-            preWorkoutSnack: "पूर्व-व्यायाम नाश्ता",
-            postWorkout: "व्यायाम के बाद",
-            dinner: "रात का खाना",
-            lightSnack: "हल्का नाश्ता"
+            monday: {
+                breakfast: "नाश्ता (10:30 बजे)",
+                midMorningSnack: "मध्य-सुबह का नाश्ता (1:00 बजे)",
+                lunch: "दोपहर का भोजन (2:00 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (4:00 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (8:00 बजे)",
+                lightSnack: "हल्का नाश्ता (10:30 बजे)"
+            },
+            tuesday: {
+                midMorningSnack: "मध्य-सुबह का नाश्ता (11:00 बजे)",
+                lunch: "दोपहर का भोजन (1:30 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (3:30 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (7:30 बजे)",
+                lightSnack: "हल्का नाश्ता (9:30 बजे)"
+            },
+            wednesday: {
+                breakfast: "नाश्ता (10:30 बजे)",
+                midMorningSnack: "मध्य-सुबह का नाश्ता (1:00 बजे)",
+                lunch: "दोपहर का भोजन (2:00 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (4:00 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (8:00 बजे)",
+                lightSnack: "हल्का नाश्ता (10:30 बजे)"
+            },
+            thursday: {
+                midMorningSnack: "मध्य-सुबह का नाश्ता (11:00 बजे)",
+                lunch: "दोपहर का भोजन (1:30 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (3:30 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (7:30 बजे)",
+                lightSnack: "हल्का नाश्ता (9:30 बजे)"
+            },
+            friday: {
+                breakfast: "नाश्ता (10:30 बजे)",
+                midMorningSnack: "मध्य-सुबह का नाश्ता (1:00 बजे)",
+                lunch: "दोपहर का भोजन (2:00 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (4:00 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (8:00 बजे)",
+                lightSnack: "हल्का नाश्ता (10:30 बजे)"
+            },
+            saturday: {
+                midMorningSnack: "मध्य-सुबह का नाश्ता (11:00 बजे)",
+                lunch: "दोपहर का भोजन (1:30 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (3:30 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (7:30 बजे)",
+                lightSnack: "हल्का नाश्ता (9:30 बजे)"
+            },
+            sunday: {
+                breakfast: "नाश्ता (10:30 बजे)",
+                midMorningSnack: "मध्य-सुबह का नाश्ता (1:00 बजे)",
+                lunch: "दोपहर का भोजन (2:00 बजे)",
+                preWorkoutSnack: "पूर्व-व्यायाम नाश्ता (4:00 बजे)",
+                postWorkout: "व्यायाम के बाद (5:30 बजे)",
+                dinner: "रात का भोजन (8:00 बजे)",
+                lightSnack: "हल्का नाश्ता (10:30 बजे)"
+            }
         },
         days: {
             sunday: "रविवार",
